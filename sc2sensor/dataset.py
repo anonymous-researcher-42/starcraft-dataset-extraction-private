@@ -115,7 +115,7 @@ class StarCraftSensor(torch.utils.data.Dataset):
     '''
     def __init__(self, root, subdir='starcraft-sensor', train=True, image_size=64, postprocess_metadata_fn=None, 
                  label_kind='all', label_func=None, use_sparse=False, to_float=True, debug=False, use_cache=True,
-                 drop_na=True):
+                 drop_na=True, compute_labels=True):
         self.data_dir = os.path.join(root, subdir)
         self.train = train
         self.use_sparse = use_sparse
@@ -142,18 +142,24 @@ class StarCraftSensor(torch.utils.data.Dataset):
             print('Using cached CSV metadata')
             md = pd.read_csv(csv_cache_file)
 
-        # Add targets based on label func
-        md['computed.target_label'] = md.apply(lambda row: self.label_func(row)[0], axis=1)
-        md['computed.target_id'] = md.apply(lambda row: self.label_func(row)[1], axis=1)
+        if not compute_labels:
+            print('Not computing labels')
+            md['computed.target_label'] = '(Unknown)'
+            md['computed.target_id'] = 0
+        else:
+            # Add targets based on label func
+            md['computed.target_label'] = md.apply(lambda row: self.label_func(row)[0], axis=1)
+            md['computed.target_id'] = md.apply(lambda row: self.label_func(row)[1], axis=1)
 
-        if drop_na:
-            # dropping any entries which do not have a label
-            # NOTE: any missing target ids should be set with pd.NA instead of None to avoid the computed.target_id
-            # series being casted to float to account for the missing value. See below for details:
-            # https://pandas.pydata.org/docs/dev/user_guide/integer_na.html#nullable-integer-data-type
-            md = md.dropna(subset=['computed.target_id']).reset_index(drop=True)
+            if drop_na:
+                # dropping any entries which do not have a label
+                # NOTE: any missing target ids should be set with pd.NA instead of None to avoid the computed.target_id
+                # series being casted to float to account for the missing value. See below for details:
+                # https://pandas.pydata.org/docs/dev/user_guide/integer_na.html#nullable-integer-data-type
+                md = md.dropna(subset=['computed.target_id']).reset_index(drop=True)
 
         # Filter metadata to get different windows
+        print('Post-processing metadata')
         temp_match_md = md.drop_duplicates(subset=['static.replay_name'])
         md = postprocess_metadata_fn(md, temp_match_md, train=self.train, labels=self.labels)
         md = md.reset_index(drop=True)  # Renumber rows
@@ -173,6 +179,7 @@ class StarCraftSensor(torch.utils.data.Dataset):
                 self._cache = dict(x=cache['x'], y=cache['y'])
         else:
             self._cache = None
+        print('Finished dataset init')
 
     def __str__(self):
         item = self[0]

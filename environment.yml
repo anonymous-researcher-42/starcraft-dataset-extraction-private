@@ -2,21 +2,30 @@ name: starcraft
 channels:
   - pytorch
   - defaults
+  - fastchan
+  - conda-forge
 dependencies:
   - python=3.7 # Needed for starcraft_ai?
-  - tqdm=4.6  # Needed for demos
+  - fastai=2.7.8 # Fast AI for benchmarks
+  - accelerate  # For distributed training
+  - transformers  # For distributed training
+  - datasets  # For distributed training
+  - tqdm>=4.6  # Needed for demos
   - scikit-image=0.19 # Needed for resizing?
   - scikit-learn=1.0.2  # Needed for utility
   - scipy=1.4 
   - pytorch=1.11
   - torchvision=0.12
   - cudatoolkit=11.3
-  - seaborn=1.6.2  # Needed for notebooks
+  - seaborn>=0.11 # Needed for notebooks
   - joblib=0.13 # For parallel processing
   - jupyter # For runing ipython notebooks
   - pandas=1.3 # For data loading
   - pip>=21.2
   - pip:
+    - deepspeed # Useful for accelerate above
+    - segmentation-models-pytorch==0.3.0 # Standard PyTorch segmentation models
+    - timm==0.4.12 # Standard PyTorch image models (needed exact since compatible with smp above)
     - scipy>=1.4 # Need to override for scikit-image to work
     - pandas==1.3 # Need to request again as it may be overriden by a pip command
     - protobuf==3.19 # Needed for protobuf to work

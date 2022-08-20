@@ -39,7 +39,7 @@ $(CONDA_INSTALL_DIR)/miniconda3/envs/starcraft: $(CONDA_INSTALL_DIR)/miniconda3
 	#$(CONDA_INSTALL_DIR)/miniconda3/bin/conda create -y -n starcraft python=3.7 pytorch torchvision cudatoolkit=11.3 scikit-image=0.19 scipy>=1.4.1 -c pytorch
 	# Add required pip packages
 	#source $(CONDA_INSTALL_DIR)/miniconda3/bin/activate starcraft && pip install sparse==0.13 --upgrade pysc2
-	$(CONDA_INSTALL_DIR)/miniconda3/bin/conda env create -f environment-simple.yml
+	$(CONDA_INSTALL_DIR)/miniconda3/bin/conda env create -f environment.yml
 
 $(INSTALL_DIR)/StarCraftII: | $(INSTALL_DIR)
 	wget http://blzdistsc2-a.akamaihd.net/Linux/SC2.3.16.1.zip
