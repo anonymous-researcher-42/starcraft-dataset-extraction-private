@@ -3,7 +3,13 @@
 Welcome! This is the [anonymous] repository for the StarCraftSensor Dataset.
 
 ## Downloading the Code:
-Unfortunately, there is not an easy way to download a full repository via Open4Science, so to clone/download this repository, please see the mirroring GitHub page: https://github.com/anonymous-researcher-42/starcraft-dataset-extraction-private
+
+If you are seeing this on the Open4Science Repo, unfortunately, there is not an easy way to download a full repository via Open4Science, so to clone/download this repository, please see the mirroring GitHub page: https://github.com/anonymous-researcher-42/starcraft-dataset-extraction-private
+
+If on the GitHub repo, one can just clone the repo as usual, and then to call `$ make sensor-dataset` to download and extract the dataset.
+
+## Dataset Nutrition Label
+![](StarCraftSensor-Nutrition-Label-cropped.png)
 
 ## Downloading the dataset
 This can be done by either manually installing from this link: https://figshare.com/s/b56ef1c8cc8c87e9115f
